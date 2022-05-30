@@ -3,7 +3,7 @@
   <div>
     <h1>SEBMATEZAR</h1>
     <input class="form-control search-crime" type="text" placeholder="auto theft">
-    <router-link to="/search">
+    <router-link to="/about">
         <button type="button" class="btn btn-primary" style="margin: 10px;">Search</button>
     </router-link>
     <p class="search-engine-info">
