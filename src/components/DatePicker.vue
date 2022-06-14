@@ -1,5 +1,5 @@
 <template>
-    <Datepicker v-model="date"></Datepicker>
+    <Datepicker v-model="date" @closed="close"> {{ date }}</Datepicker>
 </template>
 
 <script>
@@ -10,7 +10,7 @@
         components: { Datepicker },
         data() {
             return {
-                date: '2017-06-11',
+                date: null,
             };
         }
     }

@@ -14,23 +14,14 @@
             <l-map style="height: 550px" :zoom="zoom" :center="center">
                 <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
                 <l-marker v-for="marker, index in markers" :lat-lng="marker" :key="index">
-                <l-popup>{{popup[index]}}</l-popup>
+                    <l-popup>{{ popup[index] }}</l-popup>
                 </l-marker>
             </l-map>
         </div>
-        <div class="container">
-            <div>
-                <label for="formControlRange">Start date</label>
-                <Datepicker id="startdate" class="child" style="width: 200px;"></Datepicker>
-            </div>
-            <div style="padding-top: 50px;">
-                <input type="range" class="form-control-range child" id="formControlRange" style="width: 1000px;">
-            </div>
-            <div>
-                <label for="formControlRange">End date</label>
-                <Datepicker id="enddate" class="child" style="width: 200px;"></Datepicker>
-            </div>
-
+        <div>
+            <label for="formControlRange">Date range</label>
+            <Datepicker range style="width: 700px; display: block; margin-right: auto; margin-left: auto;"
+                @closed="findForDate()" />
         </div>
     </div>
 </template>
@@ -72,9 +63,8 @@ export default {
             axios.post("https://460e-2a02-a317-e343-ad80-4df1-2331-f1ac-6dd8.ngrok.io/api/elasticsearch", body)
                 .then(function (response) {
                     console.log(response)
-                    for (const element of response.data){
-                        console.log('Crime: ' + element.crime + ', date: ' + element.date + ', location: ' +  element.location + ', number: ' + element.number)
-                        vm.popup.push('Crime: ' + element.crime + ', date: ' + element.date + ', location: ' +  element.location + ', number: ' + element.number)
+                    for (const element of response.data) {
+                        vm.popup.push('Crime: ' + element.crime + ', date: ' + element.date + ', location: ' + element.location + ', number: ' + element.number)
                         vm.markers.push([element.lat, element.long]);
                     }
 
@@ -83,10 +73,34 @@ export default {
                     console.log(error)
                 })
         },
+        findForDate() {
+            const vm = this
+            this.popup = []
+            this.markers = []
+            const body = {
+                "query": 'agg assault', 
+                "start": "2009-07-01",
+                "end": "2019-07-01"
+            }
+            console.log(body)
+             axios.post("https://460e-2a02-a317-e343-ad80-4df1-2331-f1ac-6dd8.ngrok.io/api/elasticsearch", body)
+                .then(function (response) {
+                    console.log(response)
+                    for (const element of response.data) {
+                        vm.popup.push('Crime: ' + element.crime + ', date: ' + element.date + ', location: ' + element.location + ', number: ' + element.number)
+                        vm.markers.push([element.lat, element.long]);
+                    }
+
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        }
     },
     beforeMount() {
         this.getCrimes({ "query": 'auto theft' })
     },
+
 }
 </script>
 
