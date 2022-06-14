@@ -10,7 +10,7 @@
         components: { Datepicker },
         data() {
             return {
-                date: null,
+                date: '2017-06-11',
             };
         }
     }
