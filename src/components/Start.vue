@@ -2,8 +2,8 @@
     <img class="logo-app" src="../assets/sebmatezar.jpg">
   <div>
     <h1>SEBMATEZAR</h1>
-    <input class="form-control search-crime" type="text" placeholder="auto theft">
-    <router-link to="/about">
+    <input id="keyphrase-id" class="form-control search-crime" type="text" placeholder="auto theft">
+    <router-link :to="{ name: 'result', params: { keyphrase: 1234 } }">
         <button type="button" class="btn btn-primary" style="margin: 10px;">Search</button>
     </router-link>
     <p class="search-engine-info">

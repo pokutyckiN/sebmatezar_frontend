@@ -7,9 +7,8 @@
             </div>
             <input class="form-control search-crime child" type="text" placeholder="auto theft"
                 style="margin-top: 3px;">
-            <router-link class="child" to="/about" style="margin-top: 3px; margin-left: 5px;">
-                <button type="button" class="btn btn-primary">Search</button>
-            </router-link>
+            <button type="button" class="btn btn-primary child" @click="this.getCrimes()"
+                style="margin-top: 3px; margin-left: 5px; height: 35px;">Search</button>
         </div>
         <div id="map" style="padding: 50px">
             <l-map style="height: 550px" :zoom="zoom" :center="center">
@@ -37,8 +36,10 @@
 <script>
 import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
 import Datepicker from "./DatePicker.vue";
+import axios from 'axios';
 export default {
     name: 'ResultPage',
+    props: ['keyphrase'],
     components: {
         LMap,
         LTileLayer,
@@ -50,10 +51,30 @@ export default {
             url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             attribution:
                 '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-            zoom: 15,
-            center: [51.505, -0.159],
-            markerLatLng: [51.504, -0.159],
+            zoom: 13,
+            center: [33.753746, -84.386330],
+            markerLatLng: [33.753746, -84.386330],
         };
+    },
+    methods: {
+        getCrimes: function () {
+            // const body = {
+            //     "query": "auto theft",
+            // "start": "2017-02-01",
+            // "end": "2017-02-28"
+            // }
+            // const headers = {
+            //     "Access-Control-Allow-Origin": "*"
+            // };
+            axios.post("https://460e-2a02-a317-e343-ad80-4df1-2331-f1ac-6dd8.ngrok.io/api/elasticsearch", { "query": 'auto theft' })
+                .then(response => console.log(response))
+                .catch(error => {
+                    console.log(error)
+                })
+        }
+    },
+    beforeMount() {
+        this.getCrimes({ "query": 'auto theft' })
     },
 }
 </script>
